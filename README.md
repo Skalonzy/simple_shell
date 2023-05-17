@@ -70,3 +70,16 @@ The function works by first checking if the info->environ pointer is null or if 
 
 The function then returns the info->environ pointer.
 
+
+
+/*SHELL_VARIABLE C FILE*/
+int string(char **, char *) - The function works by first freeing the old string pointed to by the *old pointer. Then, the function sets the *old pointer to the new string. Finally, the function returns 1.
+
+int varibale(info_t *) - The function works by first iterating over the info->argv array. For each element in the array, the function checks if the element starts with a <span class="math-inline">\ character. If it does, then the function checks if the element is one of the special variables `?or$. If it is, then the function replaces the element with the corresponding value. If the element is not one of the special variables, then the function checks if the element is a variable name. If it is, then the function looks up the value of the variable in theinfo->env` list. If the variable is found, then the function replaces the element with the value of the variable. If the variable is not found, then the function replaces the element with an empty string.
+
+int alias(infor_t *) - The function works by first iterating over the info->alias list. For each node in the list, the function checks if the node's string starts with the info->argv[0] string. If it does, then the function frees the info->argv[0] string, copies the string after the first = character from the node's string to a new string, and sets the info->argv[0] string to the new string. If the node's string does not start with the info->argv[0] string, then the function continues to the next node.
+
+int chain(info_t *, char *, size_t *) - The function works by first checking if the current character in the buffer is a semicolon. If it is, then the function returns 1 and sets the info->cmd_buf_type to CMD_CHAIN. Otherwise, the function checks if the current two characters in the buffer are | and |. If they are, then the function returns 1 and sets the info->cmd_buf_type to CMD_OR. Similarly, the function checks if the current two characters in the buffer are & and &. If they are, then the function returns 1 and sets the info->cmd_buf_type to CMD_AND. If none of these conditions are met, then the function returns 0.
+
+void checkchain(info_t *, char *, size_t *, size_t, size_t) - The function works by first checking the info->cmd_buf_type variable. If the type is CMD_AND, then the function checks if the info->status variable is set to 1. If it is, then the function sets the buf[i] character to 0 and the j variable to the len value. This effectively removes the next command from the buffer. If the type is CMD_OR, then the function checks if the info->status variable is set to 0. If it is, then the function sets the buf[i] character to 0 and the j variable to the len value. This effectively removes the next command from the buffer.
+

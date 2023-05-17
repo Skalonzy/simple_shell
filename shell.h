@@ -15,8 +15,8 @@
 
 /*shell_variable c file*/
 int string(char **, char *);
-int varibale(info_t *);
-int alias(infor_t *);
+int variable(info_t *);
+int alias(info_t *);
 int chain(info_t *, char *, size_t *);
 void checkchain(info_t *, char *, size_t *, size_t, size_t);
 
