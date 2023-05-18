@@ -163,16 +163,16 @@ extern char **environ;
 
 /**
  * struct shell_liststring - A structure that contains singly list links
- * @n: the number section
+ * @numb: the number section
  * @str: a string
- * @n_n: next node
+ * @next: next node
  */
 
 typedef struct shell_liststring
 {
-	int n;
+	int numb;
 	char *str;
-	struct shell_liststring n_n;
+	struct shell_liststring next;
 } list_t;
 
 /**

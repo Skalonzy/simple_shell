@@ -83,3 +83,79 @@ int chain(info_t *, char *, size_t *) - The function works by first checking if 
 
 void checkchain(info_t *, char *, size_t *, size_t, size_t) - The function works by first checking the info->cmd_buf_type variable. If the type is CMD_AND, then the function checks if the info->status variable is set to 1. If it is, then the function sets the buf[i] character to 0 and the j variable to the len value. This effectively removes the next command from the buffer. If the type is CMD_OR, then the function checks if the info->status variable is set to 0. If it is, then the function sets the buf[i] character to 0 and the j variable to the len value. This effectively removes the next command from the buffer.
 
+
+
+//*shell_list1 c file*/
+void freemylist(list_t **) - frees all the memory allocated to a linked list. The function takes one argument:
+
+head_ptr: A pointer to the head of the linked list.
+The function first checks to make sure that the head_ptr pointer is not NULL. If it is, the function returns.
+
+Next, the function iterates through the linked list, freeing the memory allocated to each node. The function starts at the head node and then moves on to the next node until it reaches the end of the list.
+
+Once the function has reached the end of the list, the function sets the head_ptr pointer to NULL.
+
+int del_node(list_t **, unsigned int) - deletes a node at the specified index in a linked list. The function takes two arguments:
+
+head: A pointer to the head of the linked list.
+index: The index of the node to be deleted.
+The function first checks to make sure that the head pointer is not NULL and that the linked list is not empty. If either of these conditions are not met, the function returns 0.
+
+Next, the function checks to see if the index is 0. If it is, the function deletes the head node. If the index is not 0, the function iterates through the linked list until it reaches the node at the specified index.
+
+Once the function has reached the node at the specified index, the function sets the next member of the previous node to the next member of the node to be deleted. The function then frees the memory allocated to the node to be deleted.
+
+Finally, the function returns 1.
+
+size_t printmylist(const list_t *) - prints the contents of a linked list of strings. The function takes one argument:
+
+h: A pointer to the head of the linked list.
+The function first initializes a counter i to 0.
+
+Next, the function iterates through the linked list. For each node, the function prints the value of the str member, followed by a newline character. The function then increments the counter i.
+
+Finally, the function returns the value of the counter i.
+
+list_t *addmynode_end(list_t **, const char *, int) - adds a new node to the end of a linked list. The function takes two arguments:
+
+head: A pointer to the head of the linked list.
+str: A pointer to a string that will be stored in the new node.
+num: An integer that will be stored in the new node.
+The function first checks to make sure that the head pointer is not NULL. If it is, the function returns NULL.
+
+Next, the function allocates memory for a new node. If the memory allocation fails, the function returns NULL.
+
+The function then initializes the new node. The num member is set to the value of num and the str member is set to the value of str. If str is NULL, the str member is set to an empty string.
+
+Finally, the function iterates through the linked list until it reaches the end. The next member of the last node is then set to the new node.
+
+The function returns a pointer to the new node. If the memory allocation fails or if str is NULL, the function returns NULL.
+
+list_t *addmynode(list_t **, const char *, int) - adds a new node to the beginning of a linked list. The function takes two arguments:
+
+head: A pointer to the head of the linked list.
+str: A pointer to a string that will be stored in the new node.
+num: An integer that will be stored in the new node.
+The function first checks to make sure that the head pointer is not NULL. If it is, the function returns NULL.
+
+Next, the function allocates memory for a new node. If the memory allocation fails, the function returns NULL.
+
+The function then initializes the new node. The num member is set to the value of num and the str member is set to the value of str. If str is NULL, the str member is set to an empty string.
+
+Finally, the function sets the next member of the new node to the value of the head pointer. The head pointer is then set to the new node.
+
+The function returns a pointer to the new node. If the memory allocation fails or if str is NULL, the function returns NULL.
+
+
+
+/*AHELL_LIST2 C FILE*/
+ssize_t getnodeindex(list_t *, list_t *) - function takes two parameters: a pointer to the head of a linked list (head) and a pointer to a node in the same linked list (node). It determines the index (position) of the given node in the linked list and returns it as a ssize_t value. If the node is not found in the list, it returns -1.
+
+list_t startnode(list_t *, char *, char) - function takes a pointer to a linked list node (node), a prefix string (prefix), and a character (c). It searches for a node in the linked list whose string starts with the given prefix and, optionally, the first character of the string matches the given c. If a matching node is found, a pointer to that node is returned. If no match is found, it returns NULL.
+
+size_t printlist(const list_t *) - takes a pointer to the head of a linked list as its argument and prints the contents of the list to the console. The function works by first iterating through the linked list, printing the value of each node to the console. The function terminates the iteration when the pointer h is NULL, which indicates that the end of the list has been reached. Finally, the function returns the number of nodes in the list.
+
+char **listostring(list_t *) - takes a pointer to the head of a linked list as its argument and returns an array of strings, where each string is the value of the corresponding node in the linked list. The function works by first calling the function list_len() to determine the number of nodes in the linked list. Then, the function allocates an array of strings of the appropriate size. Next, the function iterates through the linked list, copying the value of each node to the corresponding element in the array. Finally, the function returns the array of strings.
+
+size_t listlength(const list_t *) - The function list_len() takes a pointer to the head of a linked list as its argument and returns the number of nodes in the list. The function works by first initializing a counter i to 0. Then, the function iterates through the linked list, incrementing the counter i for each node that it encounters. The function terminates the iteration when the pointer h is NULL, which indicates that the end of the list has been reached. Finally, the function returns the value of the counter i.
+
