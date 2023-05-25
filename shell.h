@@ -12,6 +12,7 @@
 #include <limits.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <list_t.h>
 
 /*shell_variable c file*/
 int string(char **, char *);
@@ -35,11 +36,11 @@ char **listostring(list_t *);
 size_t listlength(const list_t *);
 
 /*shell_history c file*/
-int numb_history(info_t *info);
-int historylist(infor_t *a, char *b, int c);
-int readhistory(info_t *a);
-int writehistory(info_t *a);
-char retrievehistory(info_t *a);
+int numb_history(info_t *);
+int historylist(info_t *, char *, int);
+int readhistory(info_t *);
+int writehistory(info_t *);
+char *retrievehistory(info_t *);
 
 /*shell_getenv c file*/
 int shell_setenv(info_t *, char *, char *);
@@ -50,18 +51,21 @@ char **shell_environ(info_t *);
 int environlist(info_t *);
 int shell_environ_unsetenv(info_t *);
 int shell_environ_setenv(info_t *);
-int shell_environ(info_t *);
+int shell_myenviron(info_t *);
 char *shell_getenv(info_t *, const char *);
 
 /*shell_info c file*/
 void shell_freeinfo(info_t *, int);
 void shell_setinfo(info_t *, char **);
 void shell_clearinfo(info_t *);
+int count_elements(char **);
 
 /*shell_getline c file*/
 void shell_handler(int);
 int shell_getline(info_t *, char **, size_t *);
 ssize_t shell_getinput(info_t *);
+ssize_t shell_getinputbuf(info_t *, char **, size_t *);
+ssize_t shell_readbuf(info_t *, char *, size_t *);
 
 /*shell_builtin1 c file*/
 int shell_help(info_t *);
@@ -70,12 +74,16 @@ int shell_exit(info_t *);
 
 /*shell_buitlin2 c file*/
 int shell_history(info_t *);
-int shell_alias(info_t *);
+int shell_unsetalias(info_t *, char *);
+int shell_setalias(info_t *, char *);
+int shell_printalias(list_t *);
+int shell_myalias(info_t *);
 
 /*shell_error1 c file*/
-int shell_putsfd(char *a, int b);
-int shell_putfd(char a, int b);
-int shell_putchar(char);
+int shell_putsfd(char *, int);
+int shell_putfd(char, int);
+void write_buffer(char *, int);
+int shell_eputchar(char);
 int shell_eputs(char *);
 
 /*shell_error2 c file*/
@@ -93,15 +101,18 @@ int shell_interactivemode(info_it *);
 
 /*shell_mem c file*/
 int memoryfreed(void **);
+void write_buffer_fd(int, char *, int);
 
 /*shell_reallocate c file*/
-void shell_realloc(void *, unsigned int, unsigned int);
+void *shell_realloc(void *, unsigned int, unsigned int);
 void memory_free(char **);
 char *shell_memset(char *, char, unsigned int);
+void shell_memcpy(void *, const void *, size_t);
 
 /*shell_token c file*/
 char **shell_token1(char *, char *);
 char **shell_token2(char *, char);
+bool is_delim(char, char *);
 
 /*shell_exit c file*/
 char *shell_strchr(char *, char);
@@ -120,7 +131,7 @@ void shell_put(char *);
 char *shell_strdup(const char *);
 char *shell_strcpy(char *, char *);
 
-/*shell_loop1 c file*/
+/*shell_loop2 c file*/
 int shell_loop(char **);
 
 /*shell_parse c file*/
@@ -128,7 +139,7 @@ char *shell_path(info_t *, char *, char *);
 char *duplicatechar(char *, int, int);
 int shell_cmd(info_t *, char *);
 
-/*shell_loop2 c file*/
+/*shell_loop1 c file*/
 int shell_hsh(info_t *, char **);
 void shell_forkcmd(info_t *);
 void shell_findcmd(info_t *);
@@ -160,6 +171,28 @@ int shell_findbuiltin(info_t *);
 	0, 0, 0}
 
 extern char **environ;
+
+/**
+ * struct env_t - structure
+ * @value: 1st parameter
+ * @nextNode: 2nd parameter
+ */
+
+typedef struct env_t
+{
+	char *value;
+	struct env_t *nextNode;
+} env_t;
+
+/**
+ * struct file_d - structure
+ * @shell_file_d: describes the file
+ */
+
+typedef struct file_d
+{
+	int shell_file_d;
+} info_t;
 
 /**
  * struct shell_liststring - A structure that contains singly list links
@@ -202,7 +235,7 @@ typedef struct list
 	int history_count;
 	int shell_readfd;
 	int shell_cmd_bufftype;
-	char *shell_cmd_buff;
+	char **shell_cmd_buff;
 	int shell_status;
 	int shell_environ_changed;
 	char **environ;
@@ -221,14 +254,14 @@ typedef struct list
 
 /**
  * struct shell_builtin - This struct has a built-in string
- * @t: 1st parameter
- * @f: 2nd parameter
+ * @type: 1st parameter
+ * @func: 2nd parameter
  */
 
 typedef struct shell_builtin
 {
-	char *t;
-	int (*f)(info_t *);
+	char *type;
+	int (*func)(info_t *);
 } builtin_table;
 
 #endif
